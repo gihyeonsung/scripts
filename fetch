@@ -1,0 +1,35 @@
+#!/bin/sh
+cpu_name=$(cat /proc/cpuinfo \
+  | grep "name" \
+  | head --line=1 \
+  | sed "s/^.*: \(.*\)$/\1/")
+cpu_count=$(cat /proc/cpuinfo \
+  | grep "cores" \
+  | uniq \
+  | sed "s/^.*: \(.*\)$/\1/")
+cpu_clock=$(cat /proc/cpuinfo \
+  | grep "MHz" \
+  | sed "s/^.*: \(.*\)$/\1/g" \
+  | python -c "
+import sys
+stdin = sys.stdin.readlines()
+print(round(sum(map(float, stdin)) / len(stdin), 2))")
+mem=$(cat /proc/meminfo \
+  | grep "MemTotal" \
+  | sed "s/^MemTotal:\s*\([1-9][0-9]*\).*$/\1/" \
+  | awk '{print $1/1024}')
+disk=$(cat /sys/block/nvme0n1/size \
+  | awk '{print $1*512/1024/1024}')
+sh=$(echo $SHELL \
+  | sed 's/.*\/\(.*\)/\1/')
+pkgs=$(pacman --query \
+  | wc -l)
+
+echo "cpu  ${cpu_clock}MHz * $cpu_count"
+echo "ram  ${mem}mb"
+echo "disk ${disk}mb"
+echo "wm   dwm"
+echo "sh   $sh"
+echo "term $TERM"
+echo "font iosevka"
+echo "pkgs ${pkgs}"
