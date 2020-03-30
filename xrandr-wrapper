@@ -1,0 +1,18 @@
+#!/bin/sh
+if [ -z $1 ]; then
+  echo "usage: xrandr-wrapper mirror"
+  echo "                      docking"
+  echo "                      dual"
+elif [ "$1" == "mirror" ]; then
+  xrandr \
+    --output eDP-1  --mode 1920x1080 \
+    --output HDMI-1 --same-as eDP-1
+elif [ "$1" == "docking" ]; then
+  xrandr \
+    --output eDP-1  --off \
+    --output HDMI-1 --mode 1920x1080
+elif [ "$1" == "dual" ]; then
+  xrandr \
+    --output eDP-1  --mode 1920x1080 \
+    --output HDMI-1 --mode 1920x1080 --above eDP-1
+fi
