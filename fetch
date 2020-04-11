@@ -24,6 +24,7 @@ sh=$(echo $SHELL \
   | sed 's/.*\/\(.*\)/\1/')
 pkgs=$(pacman --query \
   | wc -l)
+palette=$(palette.py)
 
 echo "cpu  ${cpu_clock}MHz * $cpu_count"
 echo "ram  ${mem}mb"
@@ -33,3 +34,5 @@ echo "sh   $sh"
 echo "term $TERM"
 echo "font neodgm"
 echo "pkgs ${pkgs}"
+echo
+echo "$palette"
