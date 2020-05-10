@@ -21,6 +21,6 @@ elif [ "$1" == "docking" ]; then
     --output $hdmi --mode 1920x1080
 elif [ "$1" == "dual" ]; then
   xrandr \
-    --output $edp  --mode 1920x1080 \
-    --output $hdmi --mode 1920x1080 --above $edp
+    --output $edp  --auto --pos 0x840 \
+    --output $hdmi --auto --pos 1920x0 --rotate right
 fi
