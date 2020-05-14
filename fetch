@@ -13,4 +13,4 @@ echo "sh   $sh"
 echo "term $TERM"
 echo "pkgs ${pkgs}"
 echo
-palette.py
+print-palette
