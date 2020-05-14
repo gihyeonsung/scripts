@@ -1,9 +1,8 @@
 #!/bin/sh
-sensitivity_prop="0.25 0 0 0 0.25 0 0 0 1"
-trackpoint_id=$(xinput --list \
-  | grep "TrackPoint" \
-  | sed "s/^.*id=\([0-9]\+\).*$/\1/g")
-sensitivity_id=$(xinput --list-props $trackpoint_id \
-  | grep Coordinate \
-  | sed "s/^.*(\([0-9]\+\)).*$/\1/g")
-xinput -set-prop $trackpoint_id $sensitivity_id $sensitivity_prop
+trackpoint_id=$(xinput list \
+  | grep 'TrackPoint' \
+  | sed 's/^.*id=\([0-9]\+\).*$/\1/g')
+sensitivity_id=$(xinput list-props "$trackpoint_id" \
+  | grep 'Coordinate' \
+  | sed 's/^.*(\([0-9]\+\)).*$/\1/g')
+xinput set-prop "$trackpoint_id" "$sensitivity_id" 0.25 0 0 0 0.25 0 0 0 1
