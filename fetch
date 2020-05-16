@@ -1,16 +1,13 @@
 #!/bin/sh
-clock=$(lscpu | grep 'CPU min MHz:' | grep -o '[0-9\.]*')
-mem=$(free --mebi | grep "Mem:" | tr --squeeze ' ' | cut --delimiter=' ' --field=2)
-sh=$(echo "$SHELL" | sed 's/.*\/\(.*\)/\1/')
-pkgs=$(pacman --query | wc -l)
+clock=$(lscpu --parse=MINMHZ | tail --lines=1 | xargs printf "%.0f")
+mem=$(free --mebi | grep "Mem:" | tr --squeeze ' ')
+mem_total=$(echo "$mem" | cut --delimiter=' ' --field=2)
+mem_used=$(echo "$mem" | cut --delimiter=' ' --field=3)
+uptime=$(uptime | sed -E "s/.*up\ ([0-9]{1,2})\:([0-9]{1,2}).*/\1h \2m/")
 
-echo "cpu  ${clock}MHz * $(nproc)"
-echo "mem  ${mem}MB"
-if [ -n "$WM" ]; then
-  echo "wm   $WM"
-fi
-echo "sh   $sh"
-echo "term $TERM"
-echo "pkgs ${pkgs}"
-echo
+echo "cpu    ${clock}MHz ($(nproc))"
+echo "mem    ${mem_used}/${mem_total}MiB"
+echo "uptime $uptime"
+echo "kernel $(uname -r)"
+echo ""
 print-palette
