@@ -10,4 +10,4 @@ echo "mem    ${mem_used}/${mem_total}MiB"
 echo "uptime $uptime"
 echo "kernel $(uname -r)"
 echo ""
-print-palette
+palette
