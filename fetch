@@ -3,11 +3,11 @@ clock=$(lscpu --parse=MINMHZ | tail --lines=1 | xargs printf "%.0f")
 mem=$(free --mebi | grep "Mem:" | tr --squeeze ' ')
 mem_total=$(echo "$mem" | cut --delimiter=' ' --field=2)
 mem_used=$(echo "$mem" | cut --delimiter=' ' --field=3)
-uptime=$(uptime | sed -E "s/.*up\ ([0-9]{1,2})\:([0-9]{1,2}).*/\1h \2m/")
+up=$(uptime --pretty | sed -E "s/.*up\s+//")
 
-echo "cpu    ${clock}MHz ($(nproc))"
+echo "cpu    ${clock}MHz*$(nproc)"
 echo "mem    ${mem_used}/${mem_total}MiB"
-echo "uptime $uptime"
+echo "up     $up"
 echo "kernel $(uname -r)"
 echo ""
 palette
