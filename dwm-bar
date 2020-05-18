@@ -1,0 +1,10 @@
+#!/bin/sh
+
+battery() {
+  capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+  [ "$(cat /sys/class/power_supply/AC/online)" -eq 0 ] && echo "$capacity% "
+}
+
+while true; do
+  xsetroot -name " $(battery)$(date "+%H:%M") "; sleep 30s
+done
