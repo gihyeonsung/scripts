@@ -1,0 +1,10 @@
+#!/bin/sh
+file="/sys/class/backlight/amdgpu_bl0/brightness"
+now=$(cat $file)
+offset=16
+
+case $1 in
+  i* ) echo "$((now+offset))" | sudo tee $file > /dev/null 2>&1 ;;
+  d* ) echo "$((now-offset))" | sudo tee $file > /dev/null 2>&1 ;;
+  * ) echo "usage: backlight [increase|decrease]" ;;
+esac
