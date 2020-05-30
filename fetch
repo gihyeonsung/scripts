@@ -1,13 +1,17 @@
 #!/bin/sh
-clock=$(lscpu --parse=MINMHZ | tail --lines=1 | xargs printf "%.0f")
+clock_now=$(lscpu | grep "CPU MHz:" | sed -E "s/.+:\s+([0-9]+)\..+/\1/")
+clock_max=$(lscpu --parse=MAXMHZ | tail --lines=1 | xargs printf "%.0f")
 mem=$(free --mebi | grep "Mem:" | tr --squeeze ' ')
-mem_total=$(echo "$mem" | cut --delimiter=' ' --field=2)
-mem_used=$(echo "$mem" | cut --delimiter=' ' --field=3)
+mem_max=$(echo "$mem" | cut --delimiter=' ' --field=2)
+mem_now=$(echo "$mem" | cut --delimiter=' ' --field=3)
 up=$(uptime --pretty | sed -E "s/.*up\s+//")
+outdated() {
+  outdated_pkgs=$(pacman -Qu | wc -l)
+  [ "$outdated_pkgs" -gt 0 ] && echo ", $outdated_pkgs outdated"
+}
 
-echo "cpu    ${clock}MHz*$(nproc)"
-echo "mem    ${mem_used}/${mem_total}MiB"
+echo "cpu    $clock_now / ${clock_max}MHz ($(nproc))"
+echo "mem    $mem_now / ${mem_max}MiB"
 echo "up     $up"
 echo "kernel $(uname -r)"
-echo ""
-palette
+echo "pkgs   $(pacman -Q | wc -l)$(outdated)"
