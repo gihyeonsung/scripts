@@ -6,6 +6,10 @@ sensitivity_id=$(xinput list-props "$trackpoint_id" \
   | grep -i "coordinate" \
   | sed -E "s/.*\(([0-9]+)\).*/\1/")
 
+[ "$#" -ne "1" ] \
+  && echo "Usage: $(basename "$0") SENSITIVITY" \
+  && exit 1
+
 xinput set-prop \
   "$trackpoint_id" \
   "$sensitivity_id" \
