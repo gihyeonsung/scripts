@@ -6,5 +6,5 @@ offset=2
 case "$1" in
   i* ) echo "$((now+offset))" | sudo tee $fd > /dev/null 2>&1 ;;
   d* ) echo "$((now-offset))" | sudo tee $fd > /dev/null 2>&1 ;;
-  *  ) echo "Usage: $(basename "$1") [ increase | decrease ]" ;;
+  *  ) echo "Usage: $(basename "$0") [ increase | decrease ]" ;;
 esac
