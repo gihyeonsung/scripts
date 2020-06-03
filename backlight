@@ -1,10 +1,10 @@
 #!/bin/sh
 fd="/sys/class/backlight/amdgpu_bl0/brightness"
-now=$(cat $file)
-offset=16
+now=$(cat $fd)
+offset=2
 
 case "$1" in
-  i* ) echo "$((now+offset))" | sudo tee $file > /dev/null 2>&1 ;;
-  d* ) echo "$((now-offset))" | sudo tee $file > /dev/null 2>&1 ;;
-  *  ) echo "Usage: $(basename "$1") [increase|decrease]" ;;
+  i* ) echo "$((now+offset))" | sudo tee $fd > /dev/null 2>&1 ;;
+  d* ) echo "$((now-offset))" | sudo tee $fd > /dev/null 2>&1 ;;
+  *  ) echo "Usage: $(basename "$1") [ increase | decrease ]" ;;
 esac
