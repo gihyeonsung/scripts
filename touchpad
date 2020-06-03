@@ -1,10 +1,10 @@
 #!/bin/sh
 touchpad_id=$(xinput list \
-  | grep TouchPad \
+  | grep -i "touchpad" \
   | sed -E "s/.*=([0-9]+).*/\1/")
 
 case "$1" in
   e* ) xinput enable "$touchpad_id" ;;
   d* ) xinput disable "$touchpad_id" ;;
-  *) echo "usage: $(basename "$0") [ enable | disable ]" 1>&2
+  *  ) echo "Usage: $(basename "$0") [ enable | disable ]" ;;
 esac

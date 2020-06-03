@@ -1,10 +1,10 @@
 #!/bin/sh
 trackpoint_id=$(xinput list \
-  | grep 'TrackPoint' \
-  | sed 's/^.*id=\([0-9]\+\).*$/\1/g')
+  | grep -i "trackpoint" \
+  | sed -E "s/.*id=([0-9]+).*/\1/")
 sensitivity_id=$(xinput list-props "$trackpoint_id" \
-  | grep 'Coordinate' \
-  | sed 's/^.*(\([0-9]\+\)).*$/\1/g')
+  | grep -i "coordinate" \
+  | sed -E "s/.*\(([0-9]+)\).*/\1/")
 
 xinput set-prop \
   "$trackpoint_id" \
