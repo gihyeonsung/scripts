@@ -1,0 +1,16 @@
+#!/bin/sh
+displays=$(xrandr \
+  | grep -i " connected" \
+  | sed -E "s/ .*//" )
+edp=$(echo "$displays" | grep -i "edp")
+hdmi=$(echo "$displays" | grep -i "hdmi")
+
+case "$1" in
+  m*  ) xrandr --output "$edp"  --mode '1920x1080' \
+               --output "$hdmi" --same-as "$edp" ;;
+  do* ) xrandr --output "$edp"  --off \
+               --output "$hdmi" --mode '1920x1080' ;;
+  du* ) xrandr --output "$edp"  --auto --pos '0x840' \
+               --output "$hdmi" --auto --pos '1920x0' --rotate 'right' ;;
+  *   ) echo "Usage: $(basename "$0") [ mirror | docking | dual ]" ;;
+esac
