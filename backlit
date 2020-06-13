@@ -1,0 +1,22 @@
+#!/bin/sh
+readonly fd="/sys/class/backlight/amdgpu_bl0/brightness"
+readonly now="$(cat $fd)"
+
+change () {
+  echo "$1" | sudo tee "$fd" > /dev/null
+}
+
+usage () {
+  echo "Usage: backlit get"
+  echo "               set BRIGHTNESS"
+  echo "               inc OFFSET"
+  echo "               dec OFFSET"
+}
+
+case "$1" in
+  g* ) echo "$now" ;;
+  s* ) change "$2" ;;
+  i* ) change "$((now + $2))" ;;
+  d* ) change "$((now - $2))" ;;
+  *  ) usage
+esac
