@@ -1,0 +1,58 @@
+#!/bin/sh
+readonly capacity_fd="/sys/class/power_supply/BAT0/capacity"
+readonly ac_online_fd="/sys/class/power_supply/AC/online"
+readonly pulseaudio_sink="0"
+readonly previous_pid_fd="$XDG_RUNTIME_DIR/dwm-bar-pid"
+
+battery() {
+  if [ "$(cat $ac_online_fd)" -eq 1 ]; then
+    echo "bat: ac"
+    return
+  fi
+
+  echo "bat: $(cat $capacity_fd)%"
+}
+
+volume() {
+  if [ "$(pulsemixer --id "$pulseaudio_sink" --get-mute)" -eq 1 ]; then
+    echo "vol: muted"
+    return
+  fi
+
+  echo "vol: $(pulsemixer --id "$pulseaudio_sink" --get-volume \
+    | cut -d' ' -f2)%"
+}
+
+datetime() {
+  date "+date: %-m/%-d | time: %-I:%M"
+}
+
+build_status_string() {
+  status_buffer="$(battery)"
+  status_buffer="$status_buffer | $(volume)"
+  status_buffer="$status_buffer | $(datetime)"
+
+  echo "$status_buffer"
+}
+
+run() {
+  [ -f "$previous_pid_fd" ] && kill "$(cat "$previous_pid_fd")" 2>/dev/null
+  echo "$$" > "$previous_pid_fd"
+
+  while true; do
+    xsetroot -name "$(build_status_string)"
+
+    sleep 1s
+  done
+}
+
+usage() {
+  echo "Usage: dwm-bar run"
+  echo "               stdout"
+}
+
+case "$1" in
+  s* ) build_status_string ;;
+  r* ) run ;;
+  *  ) usage ;;
+esac
