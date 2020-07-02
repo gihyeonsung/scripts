@@ -1,0 +1,31 @@
+#!/bin/sh
+export LC_CTYPE="en_US.UTF-8"
+readonly repodir="/srv/git"
+readonly htmldir="/srv/www/git.hyeon.io"
+
+readonly repopath="$(pwd)"
+readonly htmlpath="$htmldir/$(basename "$(pwd)" ".git")"
+readonly cachebase=".cache"
+
+while read -r old new ref; do
+  [ "$old" = "0000000000000000000000000000000000000000" ] && continue
+  [ "$new" = "0000000000000000000000000000000000000000" ] && continue
+
+  hasrevs=$(git rev-list "${old}" "^${new}" | sed 1q)
+  if [ -n "$hasrevs" ]; then
+    rm -f "$htmlpath/$cachebase"
+    rm -rf "$htmlpath/commit"
+    echo "Force push detected. Cache purged."
+    break
+  fi
+done
+
+mkdir -p "$htmlpath" && cd "$htmlpath" || exit 1
+stagit -c "$cachebase" "$repopath"
+ln -sf log.html index.html
+ln -sf ../style.css style.css
+ln -sf ../logo.png logo.png
+echo "Stagit page of $repopath has been generated on $htmlpath."
+
+stagit-index "$repodir"/*.git > "$htmldir/index.html"
+echo "Stagit index page has been regenerated on $htmldir."
