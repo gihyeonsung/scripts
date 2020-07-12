@@ -1,5 +1,5 @@
 #!/bin/sh
-readonly fd="/sys/class/backlight/amdgpu_bl0/brightness"
+readonly fd="/sys/class/backlight/intel_backlight/brightness"
 readonly now="$(cat $fd)"
 
 change () {
