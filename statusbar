@@ -5,11 +5,11 @@ readonly previous_pid_fd="$XDG_RUNTIME_DIR/dwm-bar-pid"
 
 battery() {
   if [ "$(cat $ac_online_fd)" -eq 1 ]; then
-    echo "bat: ac"
+    echo "ac"
     return
   fi
 
-  echo "bat: $(cat $capacity_fd)%"
+  echo "$(cat $capacity_fd)%"
 }
 
 volume() {
@@ -17,22 +17,22 @@ volume() {
     | grep -E "Sink:.+Default" \
     | sed -E "s/.+ID: (.+), Name:.+/\1/g")"
   if [ "$(pulsemixer --id "$pulseaudio_sink" --get-mute)" -eq 1 ]; then
-    echo "vol: muted"
+    echo "muted"
     return
   fi
 
-  echo "vol: $(pulsemixer --id "$pulseaudio_sink" --get-volume \
+  echo "$(pulsemixer --id "$pulseaudio_sink" --get-volume \
     | cut -d' ' -f2)%"
 }
 
 datetime() {
-  date "+date: %-m/%-d | time: %-I:%M"
+  date "+%m-%d %H:%M"
 }
 
 build_status_string() {
   status_buffer="$(battery)"
-  status_buffer="$status_buffer | $(volume)"
-  status_buffer="$status_buffer | $(datetime)"
+  status_buffer="$status_buffer $(volume)"
+  status_buffer="$status_buffer $(datetime)"
 
   echo "$status_buffer"
 }
