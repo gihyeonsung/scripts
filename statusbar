@@ -1,16 +1,5 @@
 #!/bin/sh
-readonly capacity_fd="/sys/class/power_supply/BAT0/capacity"
-readonly ac_online_fd="/sys/class/power_supply/AC/online"
 readonly previous_pid_fd="$XDG_RUNTIME_DIR/dwm-bar-pid"
-
-battery() {
-  if [ "$(cat $ac_online_fd)" -eq 1 ]; then
-    echo "ac"
-    return
-  fi
-
-  echo "$(cat $capacity_fd)%"
-}
 
 volume() {
   pulseaudio_sink="$(pulsemixer --list-sinks \
@@ -30,7 +19,6 @@ datetime() {
 }
 
 build_status_string() {
-  status_buffer="$(battery)"
   status_buffer="$status_buffer $(volume)"
   status_buffer="$status_buffer $(datetime)"
 
