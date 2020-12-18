@@ -19,8 +19,8 @@ datetime() {
 }
 
 build_status_string() {
-  status_buffer="$status_buffer $(volume)"
-  status_buffer="$status_buffer $(datetime)"
+  status_buffer="$status_buffer$(volume) "
+  status_buffer="$status_buffer$(datetime) "
 
   echo "$status_buffer"
 }
